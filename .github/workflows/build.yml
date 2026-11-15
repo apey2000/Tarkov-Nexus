@@ -1,0 +1,20 @@
+name: build-windows
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - run: wails build
+        working-directory: ui-wails
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TarkovNexus-windows
+          path: ui-wails/build/bin/*.exe
